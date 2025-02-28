@@ -4,7 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 	"github.com/ropehapi/kaizen-auth-service/internal/action"
-	"github.com/ropehapi/kaizen-auth-service/internal/middlewares"
+	"github.com/ropehapi/kaizen-auth-service/pkg/jwt"
 	"log"
 	"net/http"
 )
@@ -18,7 +18,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Post("/login", action.Login)
-	r.With(middlewares.ValidateToken).Get("/validate", func(w http.ResponseWriter, r *http.Request) {
+	r.With(jwt.ValidateToken).Get("/protected", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Access granted"))
 	})
 
