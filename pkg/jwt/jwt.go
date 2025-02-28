@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/ropehapi/kaizen-auth-service/internal/entity"
 	"net/http"
 	"os"
 	"time"
@@ -9,10 +10,11 @@ import (
 
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-func GenerateToken(username string) (string, error) {
+func GenerateToken(user *entity.User) (string, error) {
 	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 1).Unix(), // Expira em 1 hora
+		"id":         user.Id,
+		"username":   user.Username,
+		"expires_at": time.Now().Add(time.Hour * 1).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

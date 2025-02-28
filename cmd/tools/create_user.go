@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -30,12 +31,17 @@ func main() {
 }
 
 func createUser(db *sql.DB, username, password string) error {
-	// Gerar hash da senha
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO users (username, password_hash) VALUES (?, ?)", username, string(hashedPassword))
+	newUUID := uuid.New()
+	uuidBinary, err := newUUID.MarshalBinary()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec("INSERT INTO users (id, username, password_hash) VALUES (?, ?, ?)", uuidBinary, username, string(hashedPassword))
 	return err
 }
