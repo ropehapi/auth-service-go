@@ -10,7 +10,7 @@ services:
       MYSQL_DATABASE: auth-service
       MYSQL_PASSWORD: root
     ports:
-      - 3306:3306
+      - ${DB_PORT}:3306
     volumes:
       - .docker/mysql:/var/lib/mysql
       - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"

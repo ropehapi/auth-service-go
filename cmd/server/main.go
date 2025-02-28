@@ -7,6 +7,7 @@ import (
 	"github.com/ropehapi/kaizen-auth-service/pkg/jwt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -22,6 +23,6 @@ func main() {
 		w.Write([]byte("Access granted"))
 	})
 
-	log.Println("Auth service running on port 8080")
-	http.ListenAndServe(":8080", r)
+	log.Println("Auth service running on port " + os.Getenv("PORT"))
+	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
